@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
-require 'jaro_winkler/version'
+require_relative 'jaro_winkler/adjusting_table'
+require_relative 'jaro_winkler/jaro_winkler_pure'
+require_relative 'jaro_winkler/version'
 
-if RUBY_ENGINE == 'ruby'
+unless RUBY_ENGINE == 'opal'
   begin
-    require 'jaro_winkler/jaro_winkler_ext'
+    require 'opal'
+    Opal.append_path File.expand_path('..', __FILE__).untaint
   rescue LoadError
-    # Fall back to the pure implementation if the extension
-    # can't be loaded for any reason (e.g. it was never built)
-    require 'jaro_winkler/jaro_winkler_pure'
   end
-else
-  require 'jaro_winkler/jaro_winkler_pure'
 end
